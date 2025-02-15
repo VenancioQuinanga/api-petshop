@@ -5,18 +5,18 @@ module.exports = app => {
   const Address = app.src.models.endereco
   const Telephone = app.src.models.telefone
   const Gender = app.src.models.genero_usuario
-  const Category = app.src.models.categoria_usuario
   const generate_token = app.src.middlewares.gerar_token
 
   class User extends Crud{
     async create(req, res){
       const body = req.body
       let telephoneData
+      let is_admin = body.fk_category == 1  ? true : false
 
       Telephone.create({
         telephone : body['tb_telephone.telephone'],
       })
-      .then((data)=> {   
+      .then((data)=> {
         telephoneData = data
         return Address.create({
           neighborhood: body['tb_address.neighborhood'],
@@ -33,10 +33,10 @@ module.exports = app => {
           password: body.password,
           birth_date: body.birth_date,
           function: body.function,
+          is_admin: is_admin,
           fk_telephone: telephoneData.id,
           fk_address: addressData.id,
-          fk_gender: body.fk_gender,
-          fk_category: body.fk_category,
+          fk_gender: body.fk_gender
         })
       })
       .then((data) => res.status(201).json({msg: 'Created'}))
@@ -47,13 +47,12 @@ module.exports = app => {
       model.findAll({
         where: {},
         raw: true , 
-        attributes: ['id', 'name', 'email', 'birth_date', 'function', 
-        'fk_gender', 'fk_category', 'fk_address', 'fk_telephone'],
+        attributes: ['id', 'name', 'email', 'birth_date', 'function', 'is_admin',
+        'fk_gender', 'fk_address', 'fk_telephone'],
         include: [
           {model: Address, attributes: ['neighborhood','street','house']}, 
           {model: Telephone, attributes: ['telephone']}, 
-          {model: Gender, attributes: ['gender']}, 
-          {model: Category, attributes: ['category']}
+          {model: Gender, attributes: ['gender']}
         ]
       })
       .then((data)=> {
@@ -67,13 +66,13 @@ module.exports = app => {
       const email = req.body.email
       const password = req.body.password
 
-      model.findOne({where: {email} })
+      model.findOne({where: { email } })
       .then((data) => {
         if(!data) res.status(404).json({msg: 'Email inválido. '})
         else{ 
           if(data.password != password) res.status(404).json({msg: 'Senha inválida. '})
           else{
-            generate_token(req, res, data.id, data.email)
+            generate_token(req, res, data.id, data.email, data.is_admin)
           }
         }
       })
@@ -87,15 +86,14 @@ module.exports = app => {
         where: {
           id: params,
         },
-        raw: true , 
+        raw: true, 
         attributes: 
-        ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'function',
-          'fk_address', 'fk_gender', 'fk_category'],
+        ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'function', 'is_admin',
+          'fk_address', 'fk_gender'],
         include: [
           {model: Address, attributes: ['id','neighborhood','street','house']}, 
           {model: Telephone, attributes: ['id','telephone']}, 
-          {model: Gender, attributes: ['id','gender']}, 
-          {model: Category, attributes: ['id','category']}
+          {model: Gender, attributes: ['id','gender']}
         ]
       })
       .then((data)=> {
@@ -124,15 +122,14 @@ module.exports = app => {
           },
           raw: true , 
           attributes: 
-          ['id', 'name', 'email','birth_date','fk_telephone','fk_address','fk_gender','fk_category'],
+          ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'function', 'is_admin',
+             'fk_address', 'fk_gender'],
         })
         .then((data)=> {
           if (data.length != 0) res.status(200).json(data)
           else res.status(204).json({msg: 'Empty'})
         })
         .catch((error) => res.status(400).json({msg: error.message}))
-          const user = await model.findOne({where:{ id: userId 
-        }});
       
       } catch (error) {
         return res.status(404).json({ msg: `${error}. Token inválido. ` });
@@ -143,6 +140,7 @@ module.exports = app => {
       try {
         const body = req.body;
         const params = req.params;
+        let is_admin = body.fk_category == 1  ? true : false
     
         // Atualiza o usuário
         const user = await model.findOne({
@@ -155,8 +153,8 @@ module.exports = app => {
           user.password = body.password
           user.birth_date = body.birth_date
           user.function = body.function
+          user.is_admin = is_admin
           user.fk_gender = body.fk_gender
-          user.fk_category = body.fk_category
 
           await user.save();
         } else {

@@ -9,7 +9,7 @@ module.exports = app =>{
     
     app.get('/fornecedor/:params', validate_token, controller.filter)
         
-    app.patch('/fornecedor/:params', validate_token, controller.update)
+    app.patch('/fornecedor/:id', validate_token, controller.update)
 
     app.delete('/fornecedor/:params', validate_token, controller.delete)
         

@@ -1,5 +1,5 @@
 const config = require('./config')
-const sequelize = require('sequelize')
+const sequelize = require('sequelize') 
 
 module.exports = app =>{
     const connection = new sequelize(

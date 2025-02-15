@@ -36,6 +36,11 @@ module.exports = app =>{
             type: Sequelize.ENUM('Veterinario','Recepcionista','Tecnico','Operador'),
             allowNull: false
         },
+        is_admin: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: true
+        },
         fk_telephone: {
             type: Sequelize.INTEGER,
             allowNull: false
@@ -47,17 +52,12 @@ module.exports = app =>{
         fk_gender: {
             type: Sequelize.INTEGER,
             allowNull: false
-        },
-        fk_category: {
-            type: Sequelize.INTEGER,
-            allowNull: false
-        },
+        }
     })
 
     Users.belongsTo(Address, {foreignKey: 'fk_address'})
     Users.belongsTo(Telephone, {foreignKey: 'fk_telephone'})
     Users.belongsTo(Gender, {foreignKey: 'fk_gender'})
-    Users.belongsTo(Category, {foreignKey: 'fk_category'})
 
     // Users.sync({alter:true})
     return Users

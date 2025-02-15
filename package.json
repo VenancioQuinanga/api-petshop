@@ -2,6 +2,9 @@
   "name": "devjs",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "author": "devteam",
   "license": "MIT",
   "dependencies": {

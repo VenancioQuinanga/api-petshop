@@ -9,7 +9,6 @@ module.exports = app =>{
     const users = app.src.models.usuario
     const Telephone = app.src.models.telefone
     const Gender = app.src.models.genero_usuario
-    const Category = app.src.models.categoria_usuario
     const Address = app.src.models.endereco
     const SubProduct = app.src.models.sub_produtos
     const Family = app.src.models.familia_produto
@@ -125,12 +124,11 @@ module.exports = app =>{
                 include: [
                     {
                         model: users, attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone',
-                        'fk_address','fk_gender','fk_category'],
+                        'fk_address','fk_gender'],
                         include: [
                             {model: Address, attributes: ['neighborhood','street','house']}, 
                             {model: Telephone, attributes: ['telephone']}, 
-                            {model: Gender, attributes: ['gender']}, 
-                            {model: Category, attributes: ['category']}
+                            {model: Gender, attributes: ['gender']}
                         ]
                     }, 
                     {

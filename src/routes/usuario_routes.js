@@ -10,7 +10,7 @@ module.exports = app =>{
 
     app.get('/usuario', controller.read)
 
-    app.get('/getuserbytoken/:token', controller.getUserByToken); 
+    app.get('/usuario/getuserbytoken/:token', controller.getUserByToken); 
 
     app.get('/usuario/:params', validate_token, controller.filter)
 

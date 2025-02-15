@@ -4,7 +4,23 @@ module.exports = app =>{
     const Telephone = app.src.models.telefone
 
     class Provisioner extends Crud{
-        create(req, res){ super.create(req, res, model) }
+        async create(req, res){
+            const body = req.body
+      
+            Telephone.create({
+              telephone : body.telephone,
+            })
+            .then((telephoneData)=>{
+              
+              return model.create({
+                name: body.name,
+                email: body.email,
+                fk_telephone: telephoneData.id,
+              })
+            })
+            .then((data) => res.status(201).json({msg: 'Created'}))
+            .catch((error) => res.status(400).json({msg: error.message}))
+          }
 
         async read(req, res){ 
             model.findAll({
