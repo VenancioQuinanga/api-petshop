@@ -6,7 +6,6 @@ module.exports = app => {
   const users = app.src.models.usuario
   const Telephone = app.src.models.telefone
   const Gender = app.src.models.genero_usuario
-  const Category = app.src.models.categoria_usuario
   const Address = app.src.models.endereco
   const Payment_type = app.src.models.tipo_pagamento
 
@@ -38,7 +37,6 @@ module.exports = app => {
                     include: [
                       {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
                       {model: Telephone, attributes: ['telephone']},
-                      {model: Category, attributes: ['category']}, 
                       {model: Gender, attributes: ['gender']}
                     ]
                 },
@@ -47,9 +45,9 @@ module.exports = app => {
           }
         ]
       })
-      .then((data)=> {
-        if (data.length != 0) res.status(200).json(data)
-        else res.status(204).json({msg: 'Empty'})
+      .then((data)=> { 
+        if (data.length !== 0) res.status(200).json(data)
+        else res.status(204).json({msg: 'Empty'}) 
       })
       .catch((error) => res.status(400).json({msg: error.message}))
     }
@@ -80,8 +78,7 @@ module.exports = app => {
                     attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'fk_address', 'fk_gender'],
                     include: [
                       {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
-                      {model: Telephone, attributes: ['telephone']},
-                      {model: Category, attributes: ['category']}, 
+                      {model: Telephone, attributes: ['telephone']}, 
                       {model: Gender, attributes: ['gender']}
                     ]
                 },
@@ -91,8 +88,8 @@ module.exports = app => {
         ]
       })
       .then((data)=> {
-        if (data.length != 0) res.status(200).json(data)
-        else res.status(204).json({msg: 'Empty'})
+        if (!data) res.status(404).json({msg: 'Not found'}) 
+        else res.status(200).json(data)
       })
       .catch((error) => res.status(400).json({msg: error.message}))
     }
