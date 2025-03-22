@@ -14,7 +14,7 @@ module.exports = app =>{
             autoIncrement: true
         },
         name: {
-            type: Sequelize.STRING(50),
+            type: Sequelize.STRING(80),
             allowNull: true
         },
         email: {

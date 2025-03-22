@@ -1,5 +1,4 @@
 const { Sequelize } = require("sequelize")
-const { FORCE } = require("sequelize/lib/index-hints")
 
 module.exports = app =>{
     const con = app.src.database.connection
@@ -13,7 +12,7 @@ module.exports = app =>{
             allowNull: false
         },
         name: {
-            type: Sequelize.STRING(50),
+            type: Sequelize.STRING(80),
             allowNull: false
         },
         email: {

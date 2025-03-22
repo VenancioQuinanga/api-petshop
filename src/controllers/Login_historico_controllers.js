@@ -5,7 +5,6 @@ module.exports = app =>{
     const Address = app.src.models.endereco
     const Telephone = app.src.models.telefone
     const Gender = app.src.models.genero_usuario
-    const Category = app.src.models.categoria_usuario
 
     class Logged_histories extends Crud{
         create(req, res){ super.create(req, res, model) }
@@ -16,12 +15,11 @@ module.exports = app =>{
                 include: [
                     {
                         model: Users, attributes: ['id', 'name', 'email', 'birth_date',
-                         'fk_telephone', 'fk_address', 'fk_gender', 'fk_category'],
+                         'fk_telephone', 'fk_address', 'fk_gender'],
                         include: [
                             {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
                             {model: Telephone, attributes: ['telephone']}, 
-                            {model: Gender, attributes: ['gender']}, 
-                            {model: Category, attributes: ['category']}
+                            {model: Gender, attributes: ['gender']}
                         ]
                     }, 
                 ],

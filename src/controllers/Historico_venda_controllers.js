@@ -7,8 +7,6 @@ module.exports = app =>{
     const users = app.src.models.usuario
     const Telephone = app.src.models.telefone
     const Gender = app.src.models.genero_usuario
-    const Category = app.src.models.categoria_usuario
-    const Payment_type = app.src.models.tipo_pagamento
     const Address = app.src.models.endereco  
 
     class Sale_history extends Crud{
@@ -78,8 +76,7 @@ module.exports = app =>{
                       attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'fk_address', 'fk_gender'],
                       include: [
                         {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
-                        {model: Telephone, attributes: ['telephone']}, 
-                        {model: Category, attributes: ['category']},
+                        {model: Telephone, attributes: ['telephone']},
                         {model: Gender, attributes: ['gender']}
                       ]
                     },

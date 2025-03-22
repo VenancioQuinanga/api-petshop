@@ -55,6 +55,31 @@ module.exports = app => {
       }
     }
 
+    async acert(req, res) {
+      try {
+        const body = req.body;
+    
+        // Atualiza o Stock
+        const stock = await Stock.findOne({
+          where: { fk_product: body.fk_product },
+        });
+    
+        if (stock) {
+          stock.quantity = Number(body.quantity);
+          await stock.save();
+        } else {
+          return res.status(404).json({ msg: 'Stock not found' });
+        }
+    
+        // Retorna sucesso
+        return res.status(201).json({ msg: 'Created' });
+    
+      } catch (error) {
+        // Trata erros
+        return res.status(400).json({ msg: error.message });
+      }
+    }
+
     delete(req, res){ super.delete(req, res, model) }
 
     async read(req, res) {
@@ -63,20 +88,20 @@ module.exports = app => {
         raw: true , 
         attributes: ['id', 'quantity', 'date', 'fk_product', 'fk_warehouse'],
         include: [
-          {model: Product, 
-            attributes: ['id','name' , 'purchase_price', 'price', 'fk_subProduct',
+          {model: Product,
+            attributes: ['id', 'name' , 'purchase_price', 'price', 'fk_subProduct',
               'fk_family', 'fk_type', 'fk_provisioner'],
             include: [
-               {model: Family, attributes: ['family', 'description']},
-               {model: Type, attributes: ['type', 'description']},
-               {model: SubProduct, attributes: ['description']},
-               {
-                 model: Provisioner, 
-                 attributes: ['id', 'name', 'email', 'fk_telephone'],
-                 include: [
-                   {model: Telephone, attributes: ['id', 'telephone']},
-                 ]
-               },
+              {model: Family, attributes: ['family', 'description']},
+              {model: Type, attributes: ['type', 'description']},
+              {model: SubProduct, attributes: ['description']},
+              {
+                model: Provisioner, 
+                attributes: ['id', 'name', 'email', 'fk_telephone'],
+                include: [
+                  {model: Telephone, attributes: ['id', 'telephone']},
+                ]
+              },
            ]
           }, 
           {model: Warehouse, attributes: ['id', 'description']}, 
