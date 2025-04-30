@@ -1,10 +1,10 @@
 module.exports = app =>{
 
-    const sale = app.src.models.venda
+    const credit = app.src.models.credito
     const product = app.src.models.produtos
     const Stock = app.src.models.estoque_produto
     const Provisioner = app.src.models.fornecedor_produto
-    const sale_product = app.src.models.venda_produto
+    const sale_credit = app.src.models.venda_credito
     const Client = app.src.models.cliente
     const users = app.src.models.usuario
     const Telephone = app.src.models.telefone
@@ -15,13 +15,13 @@ module.exports = app =>{
     const Type = app.src.models.tipo_produto
     const Payment_type = app.src.models.tipo_pagamento
 
-    class Sales_products{
+    class Sales_credit{
         async create(req, res){
             const products = req.body.products
             const body = req.body
             let saleData
 
-            sale.create({
+            credit.create({
                 fk_payment_type : body.fk_payment_type,
                 payment: body.payment, 
                 troco: body.troco, 
@@ -31,8 +31,8 @@ module.exports = app =>{
             .then((data)=> {
                 saleData = data
                 products.map((p)=>{
-                    sale_product.create({
-                        fk_sale: data.id, 
+                    sale_credit.create({
+                        fk_credit: data.id, 
                         fk_product: p.id,
                         quantity: p.quantity
                     })
@@ -53,10 +53,10 @@ module.exports = app =>{
         }
 
         async read(req, res){
-            sale_product.findAll({
+            sale_credit.findAll({
                 where: {},
                 raw: true,
-                attributes: ['id', 'fk_sale', 'fk_product', 'quantity'],
+                attributes: ['id', 'fk_credit', 'fk_product', 'quantity'],
                 include: [
                     {
                         model: product, attributes: ['id', 'name', 'purchase_price',
@@ -86,10 +86,10 @@ module.exports = app =>{
         async filter(req, res){
             const id = req.params.params
       
-            sale_product.findAll({
-                where: {fk_sale: id},
+            sale_credit.findAll({
+                where: {fk_credit: id},
                 raw: true,
-                attributes: ['id', 'fk_sale', 'fk_product', 'quantity'],
+                attributes: ['id', 'fk_credit', 'fk_product', 'quantity'],
                 include: [
                     {
                         model: product, attributes: ['id', 'name', 'purchase_price', 'fk_subProduct',
@@ -117,7 +117,7 @@ module.exports = app =>{
         }
         
         async read_sales(req, res){
-            sale.findAll({
+            credit.findAll({
                 where: {},
                 raw:true,
                 attributes: ['id','fk_payment_type', 'payment','troco','date'],
@@ -130,7 +130,7 @@ module.exports = app =>{
                             {model: Telephone, attributes: ['telephone']}, 
                             {model: Gender, attributes: ['gender']}
                         ]
-                    }, 
+                    },
                     {
                         model: Client, 
                             attributes: ['id', 'name', 'email', 'nif', 'fk_telephone', 'fk_address', 'fk_gender'],
@@ -155,5 +155,5 @@ module.exports = app =>{
         delete(){}
     }
 
-    return new Sales_products()
+    return new Sales_credit()
 }

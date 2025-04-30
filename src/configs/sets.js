@@ -1,12 +1,13 @@
 const express = require("express")
 const cors = require('cors')
-const path = require('path')
+const dotenv = require('dotenv')
+dotenv.config()
 
 module.exports = app => {
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }));
     app.use(cors({
-        origin: "http://localhost:3000",
+        origin: process.env.APP_URL,
         methods: ["GET", "POST", "DELETE", "PATCH"],
         credentials: true
     }))

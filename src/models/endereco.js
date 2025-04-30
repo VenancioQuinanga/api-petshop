@@ -21,7 +21,7 @@ module.exports = app =>{
         house:{
             type: Sequelize.STRING(20),
             allowNull: true,
-        },
+        }
     })
 
 

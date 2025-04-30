@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
+dotenv.config()
 
-const jwt_key = 'devteamjwtsecret2468013579'
-
-module.exports = app => jwt_key
+module.exports = app => process.env.JWT_KEY

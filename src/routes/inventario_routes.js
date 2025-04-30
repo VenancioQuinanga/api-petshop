@@ -4,7 +4,9 @@ module.exports = app =>{
     
     app.post('/inventario', validate_token, controller.create)
 
-    app.get('/inventario', controller.read)
+    app.get('/inventario', validate_token, controller.read)
+
+    app.get('/inventario/saft', controller.generate_saft)
 
     app.get('/inventario/:params', validate_token, controller.filter)
 

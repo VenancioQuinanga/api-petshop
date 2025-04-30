@@ -3,7 +3,6 @@ const consign = require('consign')
 const app = express()
 
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:2000');
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -30,6 +29,9 @@ consign()
     .then('./src/models/usuario.js')
     .then('./src/models/cliente.js')
     .then('./src/models/venda.js')
+    .then('./src/models/proforma.js')
+    .then('./src/models/credito.js')
+    .then('./src/models/debito.js')
     .then('./src/models/fatura.js')
     .then('./src/models/historico.js')
     .then('./src/models/historico_venda.js')
@@ -37,6 +39,9 @@ consign()
     .then('./src/models/produtos.js')
     .then('./src/models/estoque_produto.js')
     .then('./src/models/venda_produto.js')
+    .then('./src/models/venda_credito.js')
+    .then('./src/models/venda_debito.js')
+    .then('./src/models/venda_proforma.js')
     .then('./src/models/movimento.js')
     .then('./src/models/login_historico.js')
     .then('./src/models/tipo_acerto.js')

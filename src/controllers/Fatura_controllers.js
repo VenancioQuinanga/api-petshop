@@ -1,7 +1,10 @@
+
 module.exports = app => {
   const model = app.src.models.fatura
   const Crud = app.src.global.Crud
   const Sale = app.src.models.venda
+  const Credit = app.src.models.credito
+  const Proform = app.src.models.proforma
   const Client = app.src.models.cliente
   const users = app.src.models.usuario
   const Telephone = app.src.models.telefone
@@ -18,7 +21,7 @@ module.exports = app => {
       model.findAll({
         where: {},
         raw: true , 
-        attributes: ['id', 'code', 'fk_sale'],
+        attributes: ['id', 'code', 'fk_sale', 'client_name', 'client_nif'],
         include: [
           {model: Sale, attributes: ['id','fk_payment_type', 'payment','troco','date'],
             include: [
@@ -60,7 +63,7 @@ module.exports = app => {
           fk_sale: params,
         },
         raw: true , 
-        attributes: ['id', 'code', 'fk_sale'],
+        attributes: ['id', 'code', 'fk_sale', 'client_name', 'client_nif'],
         include: [
           {model: Sale, attributes: ['id','fk_payment_type', 'payment','troco','date'],
             include: [
@@ -93,7 +96,132 @@ module.exports = app => {
       })
       .catch((error) => res.status(400).json({msg: error.message}))
     }
-    
+
+    async filter_proform(req, res){
+      const params = req.params.params
+
+      await model.findOne({
+        where: {
+          fk_proform: params,
+        },
+        raw: true, 
+        attributes: ['id', 'code', 'fk_proform', 'client_name', 'client_nif'],
+        include: [
+          {model: Proform, attributes: ['id', 'payment', 'fk_client', 'date'],
+            include: [
+              {
+                model: Client, 
+                  attributes: ['id', 'name', 'email', 'nif', 'fk_telephone', 'fk_address', 'fk_gender'],
+                  include: [
+                    {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                    {model: Telephone, attributes: ['telephone']}, 
+                    {model: Gender, attributes: ['gender']}
+                  ]
+                },
+                {
+                  model: users, 
+                    attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'fk_address', 'fk_gender'],
+                    include: [
+                      {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                      {model: Telephone, attributes: ['telephone']}, 
+                      {model: Gender, attributes: ['gender']}
+                    ]
+                }
+            ]
+          }
+        ]
+      })
+      .then((data)=> {
+        if (!data) res.status(404).json({msg: 'Not found'}) 
+        else res.status(200).json(data)
+      })
+      .catch((error) => res.status(400).json({msg: error.message}))
+    }
+
+    async filter_credit(req, res){
+      const params = req.params.params
+
+      await model.findOne({
+        where: {
+          fk_credit: params,
+        },
+        raw: true , 
+        attributes: ['id', 'code', 'fk_credit', 'client_name', 'client_nif'],
+        include: [
+          {model: Credit, attributes: ['id','fk_payment_type', 'payment','troco','date'],
+            include: [
+              {
+                model: Client, 
+                  attributes: ['id', 'name', 'email', 'nif', 'fk_telephone', 'fk_address', 'fk_gender'],
+                  include: [
+                    {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                    {model: Telephone, attributes: ['telephone']}, 
+                    {model: Gender, attributes: ['gender']}
+                  ]
+                },
+                {
+                  model: users, 
+                    attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'fk_address', 'fk_gender'],
+                    include: [
+                      {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                      {model: Telephone, attributes: ['telephone']}, 
+                      {model: Gender, attributes: ['gender']}
+                    ]
+                },
+                { model: Payment_type, attributes: ['type'] }
+            ]
+          }
+        ]
+      })
+      .then((data)=> {
+        if (!data) res.status(404).json({msg: 'Not found'}) 
+        else res.status(200).json(data)
+      })
+      .catch((error) => res.status(400).json({msg: error.message}))
+    }
+
+    async filter_debit(req, res){
+      const params = req.params.params
+
+      await model.findOne({
+        where: {
+          fk_debit: params,
+        },
+        raw: true, 
+        attributes: ['id', 'code', 'fk_debit', 'client_name', 'client_nif'],
+        include: [
+          {model: Debit, attributes: ['id','fk_payment_type', 'payment','troco','date'],
+            include: [
+              {
+                model: Client, 
+                  attributes: ['id', 'name', 'email', 'nif', 'fk_telephone', 'fk_address', 'fk_gender'],
+                  include: [
+                    {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                    {model: Telephone, attributes: ['telephone']}, 
+                    {model: Gender, attributes: ['gender']}
+                  ]
+                },
+                {
+                  model: users, 
+                    attributes: ['id', 'name', 'email', 'birth_date', 'fk_telephone', 'fk_address', 'fk_gender'],
+                    include: [
+                      {model: Address, attributes: ['neighborhood', 'street', 'house']}, 
+                      {model: Telephone, attributes: ['telephone']}, 
+                      {model: Gender, attributes: ['gender']}
+                    ]
+                },
+                { model: Payment_type, attributes: ['type'] }
+            ]
+          }
+        ]
+      })
+      .then((data)=> {
+        if (!data) res.status(404).json({msg: 'Not found'}) 
+        else res.status(200).json(data)
+      })
+      .catch((error) => res.status(400).json({msg: error.message}))
+    }
+
     update(req, res){ super.update(req, res, model) }
         
     delete(req, res){ super.delete(req, res, model) }

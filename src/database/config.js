@@ -1,9 +1,12 @@
+const dotenv = require('dotenv')
+dotenv.config()
+
 module.exports = {
-    username : 'root',
-    password : '',
-    database : 'db_dev',
+    username : process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database : process.env.DB_DATABASE,
     define: {
-        dialect: 'mysql',
+        dialect: process.env.DB_DIALECT,
         timestamps: true,
         underscored: true
     }

@@ -6,8 +6,8 @@ module.exports = app =>{
     const Users = app.src.models.usuario
     const Client = app.src.models.cliente
 
-    const Sale = con.define('tb_sales', {
-        id:{
+    const Debit = con.define('tb_debits', {
+        id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
             allowNull: false,
@@ -39,10 +39,10 @@ module.exports = app =>{
         }
     })
 
-    Sale.belongsTo(Type_payment, {foreignKey: 'fk_payment_type'})
-    Sale.belongsTo(Users, {foreignKey: 'fk_user'})
-    Sale.belongsTo(Client, {foreignKey: 'fk_client'})
+    Debit.belongsTo(Type_payment, {foreignKey: 'fk_payment_type'})
+    Debit.belongsTo(Users, {foreignKey: 'fk_user'})
+    Debit.belongsTo(Client, {foreignKey: 'fk_client'})
     
-    // Sale.sync({alter:true})
-    return Sale
+    // Debit.sync({alter:true})
+    return Debit
 }
